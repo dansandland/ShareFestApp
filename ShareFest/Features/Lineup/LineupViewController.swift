@@ -96,7 +96,7 @@ final class LineupViewController: UIViewController {
         viewModel.$acts
             .receive(on: RunLoop.main)
             .sink { [weak self] items in
-                self?.applySnapshot(animatingDifferences: true)
+                self?.applySnapshot()
             }
             .store(in: &cancellables)
     }
@@ -151,7 +151,7 @@ final class LineupViewController: UIViewController {
         collectionView.dataSource = dataSource
     }
     
-    private func applySnapshot(animatingDifferences: Bool = true) {
+    private func applySnapshot(animatingDifferences: Bool = false) {
         let acts = viewModel.acts
         var snapshot = Snapshot()
         let locations = Set(acts.map { $0.location })
@@ -162,7 +162,7 @@ final class LineupViewController: UIViewController {
             snapshot.appendItems(actsForLocation, toSection: Section(title: location))
         }
         
-        dataSource.apply(snapshot, animatingDifferences: true)
+        dataSource.apply(snapshot, animatingDifferences: animatingDifferences)
     }
 
 }
